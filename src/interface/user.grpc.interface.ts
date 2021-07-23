@@ -1,10 +1,12 @@
 import { Observable } from 'rxjs';
 
+import { Document } from 'mongoose';
+
 export interface UserService {
-  register(data: RegisterRequest): Observable<any>;
+  register(data: IRegisterRequest): Observable<any>;
 }
 
-export interface RegisterRequest {
+export interface IRegisterRequest {
   firstName: string;
   lastNamee: string;
   password: string;
@@ -14,15 +16,16 @@ export interface RegisterRequest {
   profilePhoto: string;
 }
 
-export interface User {
+export interface IUser extends Document {
   firstName: string;
   lastNamee: string;
   email: string;
   mobile: string;
   profilePhoto: string;
+  password: string;
 }
 
-export interface RegisterResponse {
+export interface IRegisterResponse {
   message: string;
-  data: User;
+  data: IUser;
 }

@@ -8,20 +8,23 @@ message RegisterRequest {
   string password = 3;
   string rePassword = 4;
   string email = 5;
-  string profilePhoto = 6;
+  string mobile = 6;
+  string profilePhoto = 7;
 }
 
 message User {
   string firstName = 1;
   string lastName = 2;
   string email = 5;
-  string profilePhoto = 6;
+  string mobile = 6;
+  string profilePhoto = 7;
 }
 
 message RegisterResponse {
   string message = 1;
   User data = 2;
 }
+
 
 service UserService {
   rpc Register (RegisterRequest) returns (RegisterResponse);

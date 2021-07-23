@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import configuration from 'config/configuration';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UserSchema } from './schema/user.schema';
 
 @Module({
   imports: [
@@ -20,6 +21,15 @@ import { AppService } from './app.service';
       }),
       inject: [ConfigService],
     }),
+    MongooseModule.forFeatureAsync([
+      {
+        name: 'User',
+        useFactory: () => {
+          const schema = UserSchema;
+          return schema;
+        },
+      },
+    ]),
   ],
   controllers: [AppController],
   providers: [AppService],
