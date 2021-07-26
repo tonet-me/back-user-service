@@ -14,7 +14,7 @@ async function bootstrap() {
       transport: Transport.GRPC,
       options: {
         url: URL,
-        package: 'otp',
+        package: 'user.auth.otp',
         protoPath: path.join(__dirname, '../proto/auth.proto'),
       },
     },
