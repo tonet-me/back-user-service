@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import configuration from 'config/configuration';
+import dbConf from 'config/db.conf';
+import serverConf from 'config/server.conf';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserSchema } from './schema/user.schema';
@@ -9,7 +10,8 @@ import { UserSchema } from './schema/user.schema';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [configuration],
+      envFilePath: ['.env.dev', '.env.prod'],
+      load: [dbConf, serverConf],
       isGlobal: true,
     }),
     MongooseModule.forRootAsync({
