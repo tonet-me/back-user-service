@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
-import { IUser } from '../interface/user.grpc.interface';
+import { IUser } from '../interface/user.interface';
 export const UserSchema = new mongoose.Schema<IUser>(
   {
     firstName: {

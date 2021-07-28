@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import * as path from 'path';
 import { AppModule } from './app.module';
+import { TransformInterceptor } from './common/utils/transform.response';
 
 async function bootstrap() {
   const HOST = process.env.BASE_URL;
@@ -19,7 +20,7 @@ async function bootstrap() {
       },
     },
   );
-
+  app.useGlobalInterceptors(new TransformInterceptor());
   await app
     .listen()
     .then(() => {

@@ -1,14 +1,15 @@
-import { Module } from '@nestjs/common';
+import { Module, CacheModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import dbConf from 'config/db.conf';
 import serverConf from 'config/server.conf';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UserSchema } from './schema/user.schema';
+import { UserSchema } from './user/schema/user.schema';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
+    CacheModule.register(),
     ConfigModule.forRoot({
       envFilePath: ['.env.dev', '.env.prod'],
       load: [dbConf, serverConf],
@@ -23,17 +24,8 @@ import { UserSchema } from './schema/user.schema';
       }),
       inject: [ConfigService],
     }),
-    MongooseModule.forFeatureAsync([
-      {
-        name: 'User',
-        useFactory: () => {
-          const schema = UserSchema;
-          return schema;
-        },
-      },
-    ]),
+    AuthModule,
+    // UserModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
