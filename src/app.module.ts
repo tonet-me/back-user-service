@@ -25,7 +25,7 @@ import { UserModule } from './user/user.module';
       inject: [ConfigService],
     }),
     AuthModule,
-    // UserModule,
+    UserModule,
   ],
 })
 export class AppModule {}

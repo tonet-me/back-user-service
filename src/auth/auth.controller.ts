@@ -8,14 +8,13 @@ import { MakeOtpResult } from './interface/auth.interface';
 @Controller('auth')
 export class AuthController {
   constructor() {}
-  @GrpcMethod('AuthService', 'MakeOtp')
-  makeOtp(body): Observable<IResponse<MakeOtpResult>> {
-    const code: number = OtpGenerate.make();
-    console.log(code);
 
+  @GrpcMethod('AuthService', 'MakeOtp')
+  public makeOtp(body): Observable<IResponse<MakeOtpResult>> {
+    const code: number = OtpGenerate.make();
     return of({
       success: true,
-      message: 'salam',
+      message: 'ارسال شد',
       data: { code },
     });
   }
