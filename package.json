@@ -33,6 +33,7 @@
     "@types/redis": "^2.8.31",
     "bcrypt": "^5.0.1",
     "cache-manager": "^3.4.4",
+    "class-validator": "^0.13.1",
     "mongoose": "^5.13.3",
     "mongoose-paginate-v2": "^1.4.1",
     "reflect-metadata": "^0.1.13",

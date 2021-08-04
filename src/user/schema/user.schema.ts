@@ -14,17 +14,30 @@ export const UserSchema = new mongoose.Schema<IUser>(
     email: {
       type: String,
       required: true,
-      unique: true,
     },
     mobile: {
       type: String,
       required: true,
       unique: true,
     },
+    userName: {
+      type: String,
+      unique: true,
+    },
     isActive: {
       type: Boolean,
       default: true,
     },
+    status: {
+      type: String,
+      enum: ['REGISTERED', 'COMPLETED'],
+      default: 'REGISTERED',
+    },
+    emailVerify: {
+      type: Boolean,
+      default: false,
+    },
+    profilePicture: String,
   },
   { timestamps: true },
 );
