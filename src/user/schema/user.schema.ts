@@ -5,15 +5,12 @@ export const UserSchema = new mongoose.Schema<IUser>(
   {
     firstName: {
       type: String,
-      required: true,
     },
     lastName: {
       type: String,
-      required: true,
     },
     email: {
       type: String,
-      required: true,
     },
     mobile: {
       type: String,
@@ -22,7 +19,6 @@ export const UserSchema = new mongoose.Schema<IUser>(
     },
     userName: {
       type: String,
-      unique: true,
     },
     isActive: {
       type: Boolean,

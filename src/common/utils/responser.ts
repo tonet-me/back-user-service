@@ -1,12 +1,12 @@
-export class Responser {
+export class Responser<T> {
   public readonly success;
   public readonly message;
-  public readonly result;
+  public readonly data: T;
   public readonly status;
-  constructor(success, message, result, status = null) {
+  constructor(success, message, result: T, status = null) {
     this.success = success;
     this.message = message;
-    this.result = result;
+    this.data = result;
     this.status = status;
   }
 }

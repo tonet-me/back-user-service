@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import * as path from 'path';
 import { AppModule } from './app.module';
+import { AllExceptionsFilter } from './common/utils/filter/allExceptions.filter';
 import { TransformInterceptor } from './common/utils/transform.response';
 
 async function bootstrap() {
@@ -15,12 +16,18 @@ async function bootstrap() {
       transport: Transport.GRPC,
       options: {
         url: URL,
-        package: 'user.auth.otp',
-        protoPath: path.join(__dirname, '../proto/auth.proto'),
+        package: ['user.auth.otp', 'user.profile'],
+        // protoLoader
+        protoPath: [
+          path.join(__dirname, '../proto/auth.proto'),
+          path.join(__dirname, '../proto/user.proto'),
+        ],
       },
     },
   );
   app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalFilters(new AllExceptionsFilter());
+
   await app
     .listen()
     .then(() => {

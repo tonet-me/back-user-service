@@ -10,11 +10,11 @@ export class CreateUserDTO {
   @IsDefined()
   readonly mobile: string;
 
-  @IsDefined()
+  @IsOptional()
   @IsString()
   readonly firstName: string;
 
-  @IsDefined()
+  @IsOptional()
   @IsString()
   readonly lastName: string;
 

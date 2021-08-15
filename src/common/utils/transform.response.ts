@@ -24,7 +24,6 @@ export class TransformInterceptor<T>
     return next.handle().pipe(
       map((data) => {
         console.log('data', data);
-
         if (data.status) {
           context.switchToHttp().getResponse().status(data.status);
         }
