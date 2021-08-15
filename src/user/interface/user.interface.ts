@@ -31,13 +31,6 @@ export interface IUser {
   readonly profilePicture?: string;
 }
 
-// export interface IUserService {
-//   updateProfile(
-//     userId: any,
-//     data: IProfileUpdateRequest,
-//   ): Observable<IResponse<IProfileUpdateResult>>;
-// }
-
 /**
  * user profile update interface
  */

@@ -31,7 +31,7 @@ export class AuthController {
     const code: number = OtpGenerate.make();
     await this.authService.saveOtp(body.phoneNumber, code);
     //TODO: send sms notify
-    return new Responser(true, 'ارسال شد', { code });
+    return new Responser(true, 'The code was sent', { code });
   }
 
   @GrpcMethod('AuthService', 'LoginOtp')
@@ -50,7 +50,7 @@ export class AuthController {
       const { accessToken } = this.authService.generateJwt(
         userExist || newUser,
       );
-      return new Responser<ILoginOtpResult>(true, '', { accessToken });
+      return new Responser<ILoginOtpResult>(true, 'Done', { accessToken });
     } else throw new ForbiddenException('code is not valid');
   }
 

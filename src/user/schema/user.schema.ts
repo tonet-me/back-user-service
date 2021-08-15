@@ -1,6 +1,10 @@
 import * as mongoose from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { IUser } from '../interface/user.interface';
+enum UserStatusEnum {
+  REGISTERED = 'REGISTERED',
+  COMPLETED = 'COMPLETED',
+}
 export const UserSchema = new mongoose.Schema<IUser>(
   {
     firstName: {
@@ -26,8 +30,8 @@ export const UserSchema = new mongoose.Schema<IUser>(
     },
     status: {
       type: String,
-      enum: ['REGISTERED', 'COMPLETED'],
-      default: 'REGISTERED',
+      enum: UserStatusEnum,
+      default: UserStatusEnum.REGISTERED,
     },
     emailVerify: {
       type: Boolean,

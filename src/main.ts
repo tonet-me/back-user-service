@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import * as path from 'path';
 import { AppModule } from './app.module';
-import { AllExceptionsFilter } from './common/utils/filter/allExceptions.filter';
+import { AllExceptionsFilter } from './common/filter/allExceptions.filter';
 import { TransformInterceptor } from './common/utils/transform.response';
 
 async function bootstrap() {
