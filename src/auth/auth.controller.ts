@@ -1,4 +1,8 @@
-import { Controller, ForbiddenException } from '@nestjs/common';
+import {
+  Controller,
+  ForbiddenException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { OtpGenerate } from 'src/common/helper/otp.generate';
 import { IResponse } from 'src/common/utils/transform.response';
@@ -11,7 +15,7 @@ import {
 } from './interface/auth.interface';
 import { Responser } from 'src/common/utils/responser';
 import { UserService } from 'src/user/user.service';
-import { IUserSchema } from 'src/user/interface/user.interface';
+import { IUser, IUserSchema } from 'src/user/interface/user.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -48,5 +52,14 @@ export class AuthController {
       );
       return new Responser<ILoginOtpResult>(true, '', { accessToken });
     } else throw new ForbiddenException('code is not valid');
+  }
+
+  @GrpcMethod('AuthService', 'validateAccessToken')
+  public async validateAccessToken(
+    body: ILoginOtpResult,
+  ): Promise<IResponse<IUser>> {
+    const user: IUser = await this.authService.valiadteJwt(body.accessToken);
+    if (user) return new Responser<IUser>(true, '', user);
+    throw new UnauthorizedException();
   }
 }

@@ -16,7 +16,7 @@ export class UserController {
   public async updateProfile(
     body: IProfileUpdateRequest,
   ): Promise<IResponse<IProfileUpdateResult>> {
-    throw new NotFoundException('peda nashod');
+    // throw new NotFoundException('peda nashod');
     console.log('ok');
 
     // const code: number = OtpGenerate.make();

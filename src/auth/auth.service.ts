@@ -1,4 +1,9 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/user/user.service';
 import { Cache } from 'cache-manager';
@@ -32,5 +37,16 @@ export class AuthService {
     return {
       accessToken: this.jwtService.sign(payload),
     };
+  }
+
+  public async valiadteJwt(token: any): Promise<IUser> {
+    const { sub } = this.jwtService.verify(token);
+
+    const user: IUser = await this.userService.findbyId(sub);
+    console.log('user', user);
+
+    if (user) return user;
+
+    throw new UnauthorizedException();
   }
 }

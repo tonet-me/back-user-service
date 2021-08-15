@@ -28,14 +28,15 @@ export interface IUser {
   readonly isActive?: boolean;
   readonly status?: UserStatus;
   readonly emailVerify?: boolean;
+  readonly profilePicture?: string;
 }
 
-export interface IUserService {
-  updateProfile(
-    userId: any,
-    data: IProfileUpdateRequest,
-  ): Observable<IResponse<IProfileUpdateResult>>;
-}
+// export interface IUserService {
+//   updateProfile(
+//     userId: any,
+//     data: IProfileUpdateRequest,
+//   ): Observable<IResponse<IProfileUpdateResult>>;
+// }
 
 /**
  * user profile update interface
