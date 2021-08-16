@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { IUser } from '../interface/user.interface';
-enum UserStatusEnum {
+export enum UserStatusEnum {
   REGISTERED = 'REGISTERED',
   COMPLETED = 'COMPLETED',
 }

@@ -1,6 +1,7 @@
 import { Document, Types } from 'mongoose';
 import { Observable } from 'rxjs';
 import { IResponse } from 'src/common/utils/transform.response';
+import { UserStatusEnum } from '../schema/user.schema';
 
 export enum UserStatus {
   REGISTERED = 'REGISTERED',
@@ -19,7 +20,7 @@ export interface IUserSchema extends Document {
 }
 
 export interface IUser {
-  readonly _id?: Types.ObjectId;
+  readonly _id?: string;
   readonly firstName?: string;
   readonly lastName?: string;
   readonly email?: string;
@@ -34,17 +35,26 @@ export interface IUser {
 /**
  * user profile update interface
  */
-export interface IProfileUpdateRequest {
-  readonly userId: string;
-  readonly firstName: string;
-  readonly lastName: string;
-  readonly email: string;
-  readonly profilePicture: string;
-}
+// export interface IProfileUpdateRequest {
+//   readonly userId: string;
+//   readonly mobile: string;
+//   readonly firstName: string;
+//   readonly lastName: string;
+//   readonly email: string;
+//   readonly profilePicture: string;
+//   readonly isActive: boolean;
+//   readonly status: UserStatusEnum;
+//   readonly userName: boolean;
+// }
 
-export interface IProfileUpdateResult {
-  readonly firstName: string;
-  readonly lastName: string;
-  readonly email: string;
-  readonly profilePicture: string;
-}
+// export interface IProfileUpdateResult {
+//   readonly userId: string;
+//   readonly mobile: string;
+//   readonly firstName: string;
+//   readonly lastName: string;
+//   readonly email: string;
+//   readonly profilePicture: string;
+//   readonly isActive: boolean;
+//   readonly status: UserStatusEnum;
+//   readonly userName: boolean;
+// }

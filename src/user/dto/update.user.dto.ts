@@ -1,10 +1,13 @@
 import {
+  IsBoolean,
   IsDefined,
   IsEmail,
+  IsEnum,
   IsOptional,
   IsString,
   IsUrl,
 } from 'class-validator';
+import { UserStatusEnum } from '../schema/user.schema';
 export class UpdateUserDTO {
   @IsOptional()
   @IsString()
@@ -20,7 +23,23 @@ export class UpdateUserDTO {
 
   @IsString()
   @IsOptional()
+  readonly mobile: string;
+
+  @IsString()
+  @IsOptional()
   readonly userName: string;
+
+  @IsEnum(UserStatusEnum)
+  @IsOptional()
+  readonly status: UserStatusEnum;
+
+  @IsEmail()
+  @IsOptional()
+  readonly emailVerify: string;
+
+  @IsBoolean()
+  @IsOptional()
+  readonly isActive: boolean;
 
   @IsUrl()
   @IsOptional()

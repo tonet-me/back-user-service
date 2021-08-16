@@ -2,23 +2,17 @@ import { Controller, NotFoundException } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { Responser } from 'src/common/utils/responser';
 import { IResponse } from 'src/common/utils/transform.response';
-import {
-  IProfileUpdateRequest,
-  IProfileUpdateResult,
-} from './interface/user.interface';
+import { IUser } from './interface/user.interface';
 import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
   @GrpcMethod('UserService', 'UpdateProfile')
-  public async updateProfile(
-    body: IProfileUpdateRequest,
-  ): Promise<IResponse<IProfileUpdateResult>> {
-    const user: IProfileUpdateResult = await this.userService.update(
-      body.userId,
-      body,
-    );
+  public async updateProfile(body: IUser): Promise<IResponse<IUser>> {
+    console.log('body', body);
+
+    const user: IUser = await this.userService.update(body._id, body);
     return new Responser(true, 'Done ', user);
   }
 }
