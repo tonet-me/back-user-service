@@ -10,7 +10,7 @@ export class UserController {
   constructor(private userService: UserService) {}
   @GrpcMethod('UserService', 'UpdateProfile')
   public async updateProfile(body: IUser): Promise<IResponse<IUser>> {
-    console.log('body', body);
+    console.log('booooooooody', body);
 
     const user: IUser = await this.userService.update(body._id, body);
     return new Responser(true, 'Done ', user);
