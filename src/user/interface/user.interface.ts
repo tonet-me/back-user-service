@@ -1,7 +1,4 @@
 import { Document, Types } from 'mongoose';
-import { Observable } from 'rxjs';
-import { IResponse } from 'src/common/utils/transform.response';
-import { UserStatusEnum } from '../schema/user.schema';
 
 export enum UserStatus {
   REGISTERED = 'REGISTERED',
