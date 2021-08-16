@@ -43,7 +43,6 @@ export class AuthService {
     const { sub } = this.jwtService.verify(token);
 
     const user: IUser = await this.userService.findbyId(sub);
-    console.log('user', user);
 
     if (user) return user;
 
