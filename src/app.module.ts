@@ -19,6 +19,7 @@ import { UserModule } from './user/user.module';
         uri: configService.get<string>('database.uri'),
         useNewUrlParser: true,
         replicaSet: false,
+        useFindAndModify: true,
       }),
       inject: [ConfigService],
     }),

@@ -1,9 +1,6 @@
 import { Document, Types } from 'mongoose';
+import { UserStatusEnum } from '../schema/user.schema';
 
-export enum UserStatus {
-  REGISTERED = 'REGISTERED',
-  COMPLETED = 'COMPELETED',
-}
 export interface IUserSchema extends Document {
   readonly firstName: string;
   readonly lastName: string;
@@ -11,8 +8,10 @@ export interface IUserSchema extends Document {
   readonly mobile: string;
   readonly userName: string;
   readonly isActive: boolean;
-  readonly status: UserStatus;
+  readonly status: UserStatusEnum;
   readonly emailVerify: boolean;
+  readonly mobileVisible: boolean;
+  readonly emailVisible: boolean;
   readonly profilePicture: string;
 }
 
@@ -24,8 +23,10 @@ export interface IUser {
   readonly mobile?: string;
   readonly userName?: string;
   readonly isActive?: boolean;
-  readonly status?: UserStatus;
+  readonly status?: UserStatusEnum;
   readonly emailVerify?: boolean;
+  readonly mobileVisible?: boolean;
+  readonly emailVisible?: boolean;
   readonly profilePicture?: string;
 }
 

@@ -28,8 +28,14 @@ export class AuthController {
   public async makeOtp(
     body: IMakeOtpRequest,
   ): Promise<IResponse<MakeOtpResult>> {
-    const code: number = OtpGenerate.make();
-    await this.authService.saveOtp(body.phoneNumber, code);
+    const canRequestOtp = await this.authService.canRequestOtp(
+      body.phoneNumber,
+    );
+    if (!canRequestOtp)
+      throw new ForbiddenException('wait and try 2 min latar');
+    const code: number = await this.authService.generateOrpCode(
+      body.phoneNumber,
+    );
     //TODO: send sms notify
     return new Responser(true, 'The code was sent', { code });
   }
@@ -40,7 +46,7 @@ export class AuthController {
     const code = await this.authService.getOtp(body.phoneNumber);
     if (code === body.code) {
       this.authService.removeOtp(body.phoneNumber);
-      const userExist: IUserSchema = await this.userService.findbymobile(
+      const userExist: IUser = await this.userService.findbymobile(
         body.phoneNumber,
       );
       if (!userExist)

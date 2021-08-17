@@ -12,11 +12,11 @@ export class UserService {
     private userModel: PaginateModel<IUserSchema>,
   ) {}
 
-  public async findbyId(userId: Types.ObjectId): Promise<IUserSchema> {
+  public async findbyId(userId: string): Promise<IUser> {
     return this.userModel.findById(userId);
   }
 
-  public async findbymobile(mobile: string): Promise<IUserSchema> {
+  public async findbymobile(mobile: string): Promise<IUser> {
     return this.userModel.findOne({ mobile });
   }
   public async create(userData: IUser): Promise<IUserSchema> {
@@ -24,11 +24,25 @@ export class UserService {
     return newUser.save();
   }
 
-  public async update(userId: string, UserData: IUser): Promise<IUserSchema> {
+  public async update(userId: string, UserData: IUser): Promise<IUser> {
     return this.userModel.findByIdAndUpdate(
       userId,
       {
         $set: UserData,
+      },
+      {
+        new: true,
+      },
+    );
+  }
+  public async setVisible(
+    userId: string,
+    visibleData: { mobileVisible?: boolean; emailVisible?: boolean },
+  ): Promise<IUser> {
+    return this.userModel.findByIdAndUpdate(
+      userId,
+      {
+        $set: visibleData,
       },
       {
         new: true,

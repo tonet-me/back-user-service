@@ -16,10 +16,18 @@ export const UserSchema = new mongoose.Schema<IUser>(
     email: {
       type: String,
     },
+    emailVisible: {
+      type: Boolean,
+      default: false,
+    },
     mobile: {
       type: String,
       required: true,
       unique: true,
+    },
+    mobileVisible: {
+      type: Boolean,
+      default: false,
     },
     userName: {
       type: String,
