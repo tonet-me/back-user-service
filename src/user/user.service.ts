@@ -19,6 +19,10 @@ export class UserService {
   public async findbymobile(mobile: string): Promise<IUser> {
     return this.userModel.findOne({ mobile });
   }
+
+  public async findByUsername(userName: string): Promise<IUser> {
+    return this.userModel.findOne({ userName });
+  }
   public async create(userData: IUser): Promise<IUserSchema> {
     const newUser = new this.userModel(userData);
     return newUser.save();

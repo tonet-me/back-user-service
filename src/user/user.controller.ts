@@ -7,7 +7,7 @@ import {
   UserCompleteProfile,
   UserUpdateLimitDTO,
 } from './dto/update.user.dto';
-import { UserIdDTO } from './dto/userId.dto';
+import { UserNameDTO } from './dto/userName.dto';
 import { VisibleInfoDTO } from './dto/visible.info.dto';
 import { IUser } from './interface/user.interface';
 import { UserStatusEnum } from './schema/user.schema';
@@ -43,6 +43,14 @@ export class UserController {
       status: UserStatusEnum.COMPLETED,
       ...CompleteData,
     });
+    return new Responser(true, 'Done ', user);
+  }
+
+  @GrpcMethod('UserService', 'GetUserPublic')
+  public async getUserPublic(body: UserNameDTO): Promise<IResponse<IUser>> {
+    const user: IUser = await this.userService.findByUsername(body.userName);
+
+    if (!user) throw new NotFoundException('profile not found');
     return new Responser(true, 'Done ', user);
   }
 }
