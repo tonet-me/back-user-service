@@ -24,9 +24,6 @@ export class TransformInterceptor<T>
   ): Observable<IResponse<T>> {
     return next.handle().pipe(
       map((data) => {
-        // if (data.status) {
-        //   context.switchToHttp().getResponse().status(data.status);
-        // }
         return {
           success: data.success,
           message: data.message || '',

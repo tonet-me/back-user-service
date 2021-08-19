@@ -52,7 +52,6 @@ export class AuthService {
 
   public async canRequestOtp(phoneNumber: string): Promise<boolean> {
     const hasCode = await this.getOtp(phoneNumber);
-    console.log('has code', hasCode);
 
     if (hasCode) return false;
     return true;

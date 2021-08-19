@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { PaginateModel, Types } from 'mongoose';
+import { Aggregate, PaginateModel, PaginateResult, Types } from 'mongoose';
 import { CreateUserDTO } from './dto/create.user.dto';
 import { UpdateUserDTO } from './dto/update.user.dto';
 import { IUser, IUserSchema } from './interface/user.interface';
@@ -20,8 +20,30 @@ export class UserService {
     return this.userModel.findOne({ mobile });
   }
 
-  public async findByUsername(userName: string): Promise<IUser> {
-    return this.userModel.findOne({ userName });
+  public async getPublic(userName: string): Promise<IUser[]> {
+    const users = await this.userModel.aggregate([
+      {
+        $match: {
+          userName,
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          firstName: 1,
+          lastName: 1,
+          profilePicture: 1,
+          userName: 1,
+          mobile: {
+            $cond: [{ $eq: ['$mobileVisible', true] }, '$mobile', null],
+          },
+          email: {
+            $cond: [{ $eq: ['$emailVisible', true] }, '$email', null],
+          },
+        },
+      },
+    ]);
+    return users.length > 0 ? users[0] : null;
   }
   public async create(userData: IUser): Promise<IUserSchema> {
     const newUser = new this.userModel(userData);

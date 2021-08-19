@@ -47,9 +47,8 @@ export class UserController {
   }
 
   @GrpcMethod('UserService', 'GetUserPublic')
-  public async getUserPublic(body: UserNameDTO): Promise<IResponse<IUser>> {
-    const user: IUser = await this.userService.findByUsername(body.userName);
-
+  public async getUserPublic(body: UserNameDTO): Promise<IResponse<any>> {
+    const user = await this.userService.getPublic(body.userName);
     if (!user) throw new NotFoundException('profile not found');
     return new Responser(true, 'Done ', user);
   }

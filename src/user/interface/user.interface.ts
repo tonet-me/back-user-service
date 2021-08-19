@@ -29,30 +29,3 @@ export interface IUser {
   readonly emailVisible?: boolean;
   readonly profilePicture?: string;
 }
-
-/**
- * user profile update interface
- */
-// export interface IProfileUpdateRequest {
-//   readonly userId: string;
-//   readonly mobile: string;
-//   readonly firstName: string;
-//   readonly lastName: string;
-//   readonly email: string;
-//   readonly profilePicture: string;
-//   readonly isActive: boolean;
-//   readonly status: UserStatusEnum;
-//   readonly userName: boolean;
-// }
-
-// export interface IProfileUpdateResult {
-//   readonly userId: string;
-//   readonly mobile: string;
-//   readonly firstName: string;
-//   readonly lastName: string;
-//   readonly email: string;
-//   readonly profilePicture: string;
-//   readonly isActive: boolean;
-//   readonly status: UserStatusEnum;
-//   readonly userName: boolean;
-// }
