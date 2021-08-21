@@ -19,11 +19,7 @@ export class UpdateUserDTO {
 
   @IsOptional()
   @IsString()
-  readonly firstName: string;
-
-  @IsOptional()
-  @IsString()
-  readonly lastName: string;
+  readonly fullName: string;
 
   @IsOptional()
   @IsString()
@@ -71,11 +67,7 @@ export class UserCompleteProfile {
 
   @IsDefined()
   @IsString()
-  readonly firstName: string;
-
-  @IsDefined()
-  @IsString()
-  readonly lastName: string;
+  readonly fullName: string;
 
   @IsOptional()
   @IsString()

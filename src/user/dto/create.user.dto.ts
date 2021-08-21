@@ -12,11 +12,7 @@ export class CreateUserDTO {
 
   @IsOptional()
   @IsString()
-  readonly firstName: string;
-
-  @IsOptional()
-  @IsString()
-  readonly lastName: string;
+  readonly fullName: string;
 
   @IsOptional()
   @IsString()

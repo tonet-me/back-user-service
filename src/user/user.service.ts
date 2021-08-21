@@ -30,8 +30,8 @@ export class UserService {
       {
         $project: {
           _id: 1,
-          firstName: 1,
-          lastName: 1,
+          fullName: 1,
+          title: 1,
           profilePicture: 1,
           userName: 1,
           mobile: {

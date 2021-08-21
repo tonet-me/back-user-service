@@ -7,10 +7,7 @@ export enum UserStatusEnum {
 }
 export const UserSchema = new mongoose.Schema<IUser>(
   {
-    firstName: {
-      type: String,
-    },
-    lastName: {
+    fullName: {
       type: String,
     },
     title: String,
