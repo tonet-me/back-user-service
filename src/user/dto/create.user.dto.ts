@@ -1,10 +1,13 @@
+import { Type } from 'class-transformer';
 import {
   IsDefined,
   IsEmail,
   IsOptional,
   IsString,
   IsUrl,
+  ValidateNested,
 } from 'class-validator';
+import { ContactDTO } from './update.user.dto';
 export class CreateUserDTO {
   @IsString()
   @IsDefined()
@@ -29,4 +32,11 @@ export class CreateUserDTO {
   @IsUrl()
   @IsOptional()
   readonly profilePicture: string;
+
+  @IsOptional()
+  @ValidateNested({
+    each: true,
+  })
+  @Type(() => ContactDTO)
+  readonly contact: ContactDTO;
 }

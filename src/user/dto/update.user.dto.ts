@@ -8,10 +8,26 @@ import {
   IsString,
   IsUrl,
   Matches,
+  ValidateNested,
 } from 'class-validator';
 import { OmitType } from '@nestjs/mapped-types';
 
 import { UserStatusEnum } from '../schema/user.schema';
+import { Type } from 'class-transformer';
+
+export class ContactDTO {
+  @IsOptional()
+  @IsString()
+  readonly phone: string;
+
+  @IsOptional()
+  @IsString()
+  readonly fax: string;
+
+  @IsOptional()
+  @IsString()
+  readonly address: string;
+}
 export class UpdateUserDTO {
   @IsOptional()
   @IsMongoId()
@@ -53,11 +69,19 @@ export class UpdateUserDTO {
   @IsUrl()
   @IsOptional()
   readonly profilePicture: string;
+
+  @IsOptional()
+  @ValidateNested({
+    each: true,
+  })
+  @Type(() => ContactDTO)
+  readonly contact: ContactDTO;
 }
 export class UserUpdateLimitDTO extends OmitType(UpdateUserDTO, [
   'status',
   'emailVerify',
   'mobile',
+  'isActive',
 ] as const) {}
 
 export class UserCompleteProfile {

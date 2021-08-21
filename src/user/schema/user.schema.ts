@@ -43,6 +43,11 @@ export const UserSchema = new mongoose.Schema<IUser>(
       type: Boolean,
       default: false,
     },
+    contact: {
+      phone: String,
+      fax: String,
+      address: String,
+    },
     profilePicture: String,
   },
   { timestamps: true },

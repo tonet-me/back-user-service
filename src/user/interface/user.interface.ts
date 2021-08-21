@@ -1,6 +1,11 @@
 import { Document, Types } from 'mongoose';
 import { UserStatusEnum } from '../schema/user.schema';
 
+interface IContact {
+  readonly phone: string;
+  readonly fax: string;
+  readonly address: string;
+}
 export interface IUserSchema extends Document {
   readonly fullName: string;
   readonly title: string;
@@ -13,6 +18,7 @@ export interface IUserSchema extends Document {
   readonly mobileVisible: boolean;
   readonly emailVisible: boolean;
   readonly profilePicture: string;
+  readonly contact: IContact;
 }
 
 export interface IUser {
@@ -28,4 +34,5 @@ export interface IUser {
   readonly mobileVisible?: boolean;
   readonly emailVisible?: boolean;
   readonly profilePicture?: string;
+  readonly contact?: IContact;
 }

@@ -34,6 +34,7 @@ export class UserService {
           title: 1,
           profilePicture: 1,
           userName: 1,
+          contact: 1,
           mobile: {
             $cond: [{ $eq: ['$mobileVisible', true] }, '$mobile', null],
           },
