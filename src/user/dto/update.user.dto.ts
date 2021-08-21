@@ -25,6 +25,10 @@ export class UpdateUserDTO {
   @IsString()
   readonly lastName: string;
 
+  @IsOptional()
+  @IsString()
+  readonly title: string;
+
   @IsEmail()
   @IsOptional()
   readonly email: string;
@@ -58,7 +62,6 @@ export class UserUpdateLimitDTO extends OmitType(UpdateUserDTO, [
   'status',
   'emailVerify',
   'mobile',
-  'email',
 ] as const) {}
 
 export class UserCompleteProfile {
@@ -73,6 +76,10 @@ export class UserCompleteProfile {
   @IsDefined()
   @IsString()
   readonly lastName: string;
+
+  @IsOptional()
+  @IsString()
+  readonly title: string;
 
   @IsOptional()
   @IsUrl()

@@ -13,6 +13,7 @@ export const UserSchema = new mongoose.Schema<IUser>(
     lastName: {
       type: String,
     },
+    title: String,
     email: {
       type: String,
     },

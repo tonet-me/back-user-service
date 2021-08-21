@@ -4,6 +4,7 @@ import { UserStatusEnum } from '../schema/user.schema';
 export interface IUserSchema extends Document {
   readonly firstName: string;
   readonly lastName: string;
+  readonly title: string;
   readonly email: string;
   readonly mobile: string;
   readonly userName: string;
@@ -19,6 +20,7 @@ export interface IUser {
   readonly _id?: string;
   readonly firstName?: string;
   readonly lastName?: string;
+  readonly title?: string;
   readonly email?: string;
   readonly mobile?: string;
   readonly userName?: string;

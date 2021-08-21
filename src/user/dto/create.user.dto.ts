@@ -18,6 +18,10 @@ export class CreateUserDTO {
   @IsString()
   readonly lastName: string;
 
+  @IsOptional()
+  @IsString()
+  readonly title: string;
+
   @IsEmail()
   @IsOptional()
   readonly email: string;
