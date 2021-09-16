@@ -1,11 +1,9 @@
-import { Type } from 'class-transformer';
 import {
   IsDefined,
   IsEmail,
   IsOptional,
   IsString,
   IsUrl,
-  ValidateNested,
 } from 'class-validator';
 export class CreateUserDTO {
   @IsString()
