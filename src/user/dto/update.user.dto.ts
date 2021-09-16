@@ -13,21 +13,7 @@ import {
 import { OmitType } from '@nestjs/mapped-types';
 
 import { UserStatusEnum } from '../schema/user.schema';
-import { Type } from 'class-transformer';
 
-export class ContactDTO {
-  @IsOptional()
-  @IsString()
-  readonly phone: string;
-
-  @IsOptional()
-  @IsString()
-  readonly fax: string;
-
-  @IsOptional()
-  @IsString()
-  readonly address: string;
-}
 export class UpdateUserDTO {
   @IsOptional()
   @IsMongoId()
@@ -37,26 +23,13 @@ export class UpdateUserDTO {
   @IsString()
   readonly fullName: string;
 
-  @IsOptional()
-  @IsString()
-  readonly title: string;
-
-  @IsEmail()
-  @IsOptional()
-  readonly email: string;
-
   @IsString()
   @IsOptional()
   readonly mobile: string;
 
-  @IsString()
+  @IsEmail()
   @IsOptional()
-  @Matches(/^(?=[a-zA-Z0-9._]{5,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/)
-  readonly userName: string;
-
-  @IsEnum(UserStatusEnum)
-  @IsOptional()
-  readonly status: UserStatusEnum;
+  readonly email: string;
 
   @IsEmail()
   @IsOptional()
@@ -64,24 +37,26 @@ export class UpdateUserDTO {
 
   @IsBoolean()
   @IsOptional()
-  readonly isActive: boolean;
+  readonly verified: boolean;
 
   @IsUrl()
   @IsOptional()
-  readonly profilePicture: string;
+  readonly photo: string;
 
+  @IsBoolean()
   @IsOptional()
-  @ValidateNested({
-    each: true,
-  })
-  @Type(() => ContactDTO)
-  readonly contact: ContactDTO;
+  readonly isActive: boolean;
+
+  @IsEnum(UserStatusEnum)
+  @IsOptional()
+  readonly status: UserStatusEnum;
 }
 export class UserUpdateLimitDTO extends OmitType(UpdateUserDTO, [
   'status',
   'emailVerify',
   'mobile',
   'isActive',
+  'verified',
 ] as const) {}
 
 export class UserCompleteProfile {
@@ -94,15 +69,10 @@ export class UserCompleteProfile {
   readonly fullName: string;
 
   @IsOptional()
-  @IsString()
-  readonly title: string;
-
-  @IsOptional()
   @IsUrl()
-  readonly profilePicture: string;
+  readonly photo: string;
 
-  @IsDefined()
-  @IsString()
-  @Matches(/^(?=[a-zA-Z0-9._]{5,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/)
-  readonly userName: string;
+  @IsEmail()
+  @IsOptional()
+  readonly email: string;
 }

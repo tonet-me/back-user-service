@@ -2,7 +2,7 @@ export interface IMakeOtpRequest {
   phoneNumber: string;
 }
 
-export interface MakeOtpResult {
+export interface IMakeOtpResult {
   code: number;
 }
 

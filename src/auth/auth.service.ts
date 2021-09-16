@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/user/user.service';
 import { Cache } from 'cache-manager';
 import { JwtService } from '@nestjs/jwt';
-import { IUser, IUserSchema } from 'src/user/interface/user.interface';
+import { IUser } from 'src/user/interface/user.interface';
 import { OtpGenerate } from 'src/common/helper/otp.generate';
 
 @Injectable()
@@ -33,7 +33,7 @@ export class AuthService {
     return this.cacheManager.del(phoneNumber + 'OTP');
   }
 
-  public generateJwt(user: IUser): any {
+  public generateJwt(user: Partial<IUser>): any {
     const payload = { mobile: user.mobile, sub: user._id, status: user.status };
     return {
       accessToken: this.jwtService.sign(payload),

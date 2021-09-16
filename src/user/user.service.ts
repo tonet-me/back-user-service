@@ -1,15 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Aggregate, PaginateModel, PaginateResult, Types } from 'mongoose';
-import { CreateUserDTO } from './dto/create.user.dto';
-import { UpdateUserDTO } from './dto/update.user.dto';
-import { IUser, IUserSchema } from './interface/user.interface';
+import { PaginateModel } from 'mongoose';
+import { IUser } from './interface/user.interface';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel('User')
-    private userModel: PaginateModel<IUserSchema>,
+    private userModel: PaginateModel<IUser>,
   ) {}
 
   public async findbyId(userId: string): Promise<IUser> {
@@ -20,56 +18,45 @@ export class UserService {
     return this.userModel.findOne({ mobile });
   }
 
-  public async getPublic(userName: string): Promise<IUser[]> {
-    const users = await this.userModel.aggregate([
-      {
-        $match: {
-          userName,
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          fullName: 1,
-          title: 1,
-          profilePicture: 1,
-          userName: 1,
-          contact: 1,
-          mobile: {
-            $cond: [{ $eq: ['$mobileVisible', true] }, '$mobile', null],
-          },
-          email: {
-            $cond: [{ $eq: ['$emailVisible', true] }, '$email', null],
-          },
-        },
-      },
-    ]);
-    return users.length > 0 ? users[0] : null;
-  }
-  public async create(userData: IUser): Promise<IUserSchema> {
+  // public async getPublic(userName: string): Promise<IUser[]> {
+  //   const users = await this.userModel.aggregate([
+  //     {
+  //       $match: {
+  //         userName,
+  //       },
+  //     },
+  //     {
+  //       $project: {
+  //         _id: 1,
+  //         fullName: 1,
+  //         title: 1,
+  //         profilePicture: 1,
+  //         userName: 1,
+  //         contact: 1,
+  //         mobile: {
+  //           $cond: [{ $eq: ['$mobileVisible', true] }, '$mobile', null],
+  //         },
+  //         email: {
+  //           $cond: [{ $eq: ['$emailVisible', true] }, '$email', null],
+  //         },
+  //       },
+  //     },
+  //   ]);
+  //   return users.length > 0 ? users[0] : null;
+  // }
+  public async create(userData: Partial<IUser>): Promise<IUser> {
     const newUser = new this.userModel(userData);
     return newUser.save();
   }
 
-  public async update(userId: string, UserData: IUser): Promise<IUser> {
-    return this.userModel.findByIdAndUpdate(
-      userId,
-      {
-        $set: UserData,
-      },
-      {
-        new: true,
-      },
-    );
-  }
-  public async setVisible(
+  public async update(
     userId: string,
-    visibleData: { mobileVisible?: boolean; emailVisible?: boolean },
+    UserData: Partial<IUser>,
   ): Promise<IUser> {
     return this.userModel.findByIdAndUpdate(
       userId,
       {
-        $set: visibleData,
+        $set: UserData,
       },
       {
         new: true,

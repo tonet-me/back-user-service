@@ -2,34 +2,31 @@ import * as mongoose from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { IUser } from '../interface/user.interface';
 export enum UserStatusEnum {
-  REGISTERED = 'REGISTERED',
-  COMPLETED = 'COMPLETED',
+  REGISTERED = 'registered',
+  COMPLETED = 'completed',
 }
 export const UserSchema = new mongoose.Schema<IUser>(
   {
     fullName: {
       type: String,
     },
-    title: String,
-    email: {
-      type: String,
-    },
-    emailVisible: {
-      type: Boolean,
-      default: false,
-    },
     mobile: {
       type: String,
       required: true,
       unique: true,
     },
-    mobileVisible: {
+    email: {
+      type: String,
+    },
+    emailVerify: {
       type: Boolean,
       default: false,
     },
-    userName: {
-      type: String,
+    verified: {
+      type: Boolean,
+      default: false,
     },
+    photo: String,
     isActive: {
       type: Boolean,
       default: true,
@@ -39,16 +36,6 @@ export const UserSchema = new mongoose.Schema<IUser>(
       enum: UserStatusEnum,
       default: UserStatusEnum.REGISTERED,
     },
-    emailVerify: {
-      type: Boolean,
-      default: false,
-    },
-    contact: {
-      phone: String,
-      fax: String,
-      address: String,
-    },
-    profilePicture: String,
   },
   { timestamps: true },
 );

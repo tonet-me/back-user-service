@@ -2,13 +2,7 @@ import { Controller, NotFoundException } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { Responser } from 'src/common/utils/responser';
 import { IResponse } from 'src/common/utils/transform.response';
-import {
-  UpdateUserDTO,
-  UserCompleteProfile,
-  UserUpdateLimitDTO,
-} from './dto/update.user.dto';
-import { UserNameDTO } from './dto/userName.dto';
-import { VisibleInfoDTO } from './dto/visible.info.dto';
+import { UserCompleteProfile, UserUpdateLimitDTO } from './dto/update.user.dto';
 import { IUser } from './interface/user.interface';
 import { UserStatusEnum } from './schema/user.schema';
 import { UserService } from './user.service';
@@ -25,15 +19,6 @@ export class UserController {
     return new Responser(true, 'Done ', user);
   }
 
-  @GrpcMethod('UserService', 'SetVisibleInfo')
-  public async setVisbleDataInfo(
-    body: VisibleInfoDTO,
-  ): Promise<IResponse<IUser>> {
-    const { _id, ...visibleData } = body;
-    const user: IUser = await this.userService.update(_id, visibleData);
-    return new Responser(true, 'Done ', user);
-  }
-
   @GrpcMethod('UserService', 'CompleteProfile')
   public async completeProfile(
     body: UserCompleteProfile,
@@ -43,13 +28,6 @@ export class UserController {
       status: UserStatusEnum.COMPLETED,
       ...CompleteData,
     });
-    return new Responser(true, 'Done ', user);
-  }
-
-  @GrpcMethod('UserService', 'GetUserPublic')
-  public async getUserPublic(body: UserNameDTO): Promise<IResponse<any>> {
-    const user = await this.userService.getPublic(body.userName);
-    if (!user) throw new NotFoundException('profile not found');
     return new Responser(true, 'Done ', user);
   }
 }
