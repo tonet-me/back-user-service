@@ -1,5 +1,5 @@
 export class OtpGenerate {
   static make(): number {
-    return Math.floor(Math.random() * (999999 - 100000)) + 100000;
+    return Math.floor(Math.random() * (99999 - 10000)) + 10000;
   }
 }
