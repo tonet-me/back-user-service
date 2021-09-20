@@ -9,12 +9,13 @@ import { AuthService } from './auth.service';
 import {
   ILoginOtp,
   ILoginOtpResult,
-  IMakeOtpRequest,
   IMakeOtpResult,
 } from './interface/auth.interface';
 import { Responser } from 'src/common/utils/responser';
 import { UserService } from 'src/user/user.service';
 import { IUser } from 'src/user/interface/user.interface';
+import { MakeOtpRequestDTO } from './dto/make.otp.request.dto';
+import { LoginOtpDTO } from './dto/login.otp.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -25,7 +26,7 @@ export class AuthController {
 
   @GrpcMethod('AuthService', 'MakeOtp')
   public async makeOtp(
-    body: IMakeOtpRequest,
+    body: MakeOtpRequestDTO,
   ): Promise<IResponse<IMakeOtpResult>> {
     const canRequestOtp = await this.authService.canRequestOtp(
       body.phoneNumber,
@@ -40,7 +41,9 @@ export class AuthController {
   }
 
   @GrpcMethod('AuthService', 'LoginOtp')
-  public async loginOtp(body: ILoginOtp): Promise<IResponse<ILoginOtpResult>> {
+  public async loginOtp(
+    body: LoginOtpDTO,
+  ): Promise<IResponse<ILoginOtpResult>> {
     let newUser: IUser;
     const code = await this.authService.getOtp(body.phoneNumber);
     if (code === body.code) {
