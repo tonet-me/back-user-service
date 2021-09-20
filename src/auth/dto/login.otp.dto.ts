@@ -1,4 +1,4 @@
-import { IsDefined, IsNumber, Length, Matches } from 'class-validator';
+import { IsDefined, IsNumber, Matches } from 'class-validator';
 
 export class LoginOtpDTO {
   @IsDefined()
@@ -7,6 +7,5 @@ export class LoginOtpDTO {
 
   @IsDefined()
   @IsNumber()
-  @Length(5)
   readonly code: number;
 }
