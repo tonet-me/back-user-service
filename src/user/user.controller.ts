@@ -13,7 +13,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @GrpcMethod('UserService', 'Getrofile')
+  @GrpcMethod('UserService', 'GetProfile')
   public async getProfile(body: UserIdDTO): Promise<IResponse<IUser>> {
     const { _id } = body;
     const user: IUser = await this.userService.findbyId(_id);
