@@ -17,4 +17,5 @@ export interface ILoginOtp {
 
 export interface ILoginOtpResult {
   accessToken: string;
+  refreshToken: string;
 }

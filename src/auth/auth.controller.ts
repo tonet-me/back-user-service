@@ -55,10 +55,16 @@ export class AuthController {
         newUser = await this.userService.create({
           mobile: body.phoneNumber,
         });
-      const { accessToken } = this.authService.generateJwt(
+      const { accessToken } = await this.authService.generateJwt(
         userExist || newUser,
       );
-      return new Responser<ILoginOtpResult>(true, 'Done', { accessToken });
+      const { refreshToken } = await this.authService.generateRefreshJwt(
+        userExist || newUser,
+      );
+      return new Responser<ILoginOtpResult>(true, 'Done', {
+        accessToken,
+        refreshToken,
+      });
     } else throw new ForbiddenException('code is not valid');
   }
 
@@ -66,8 +72,26 @@ export class AuthController {
   public async validateAccessToken(
     body: ILoginOtpResult,
   ): Promise<IResponse<IUser>> {
-    const user: IUser = await this.authService.valiadteJwt(body.accessToken);
+    const user: IUser = await this.authService.validateJwt(body.accessToken);
     if (user) return new Responser<IUser>(true, '', user);
+    throw new UnauthorizedException();
+  }
+
+  @GrpcMethod('AuthService', 'getRefreshToken')
+  public async getRefreshToken(
+    body: ILoginOtpResult,
+  ): Promise<IResponse<ILoginOtpResult>> {
+    const user: IUser = await this.authService.validateRefreshJwt(
+      body.refreshToken,
+    );
+    if (user) {
+      const { accessToken } = await this.authService.generateJwt(user);
+      const { refreshToken } = await this.authService.generateRefreshJwt(user);
+      return new Responser<ILoginOtpResult>(true, 'Done', {
+        accessToken,
+        refreshToken,
+      });
+    }
     throw new UnauthorizedException();
   }
 }
