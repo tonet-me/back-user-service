@@ -32,12 +32,12 @@ export class AuthController {
       body.phoneNumber,
     );
     if (!canRequestOtp)
-      throw new ForbiddenException('wait and try 2 min latar');
+      throw new ForbiddenException('The code has already been sent');
     const code: number = await this.authService.generateOrpCode(
       body.phoneNumber,
     );
     //TODO: send sms notify
-    return new Responser(true, 'The code was sent', { code });
+    return new Responser(true, 'The code was sent:', { code });
   }
 
   @GrpcMethod('AuthService', 'LoginOtp')
