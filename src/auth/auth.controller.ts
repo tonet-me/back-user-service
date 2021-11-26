@@ -46,7 +46,7 @@ export class AuthController {
       phoneNumber: body.phoneNumber,
     });
 
-    return new Responser(true, 'The code was sent:', { code });
+    return new Responser(true, 'The code was sent:');
   }
 
   @GrpcMethod('AuthService', 'LoginOtp')
