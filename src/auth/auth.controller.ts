@@ -16,12 +16,14 @@ import { UserService } from 'src/user/user.service';
 import { IUser } from 'src/user/interface/user.interface';
 import { MakeOtpRequestDTO } from './dto/make.otp.request.dto';
 import { LoginOtpDTO } from './dto/login.otp.dto';
+import { SmsService } from 'src/notify/sms.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
     private userService: UserService,
+    private smsService: SmsService,
   ) {}
 
   @GrpcMethod('AuthService', 'MakeOtp')
@@ -31,12 +33,19 @@ export class AuthController {
     const canRequestOtp = await this.authService.canRequestOtp(
       body.phoneNumber,
     );
+
     if (!canRequestOtp)
       throw new ForbiddenException('The code has already been sent');
+
     const code: number = await this.authService.generateOrpCode(
       body.phoneNumber,
     );
-    //TODO: send sms notify
+
+    const sendNotify = await this.smsService.sendOneByPattern({
+      code: code.toString(),
+      phoneNumber: body.phoneNumber,
+    });
+
     return new Responser(true, 'The code was sent:', { code });
   }
 
