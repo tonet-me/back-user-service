@@ -25,8 +25,6 @@ export class SmsService {
           template: 'tonet-verify-code',
         },
         function (response, status) {
-          console.log(response);
-          console.log(status);
           if (status == 200) return resolve(true);
           else return reject(new Error(`message not send with code ${status}`));
         },

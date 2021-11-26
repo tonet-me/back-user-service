@@ -48,8 +48,6 @@ export class AuthService {
   }
 
   public async generateRefreshJwt(user: Partial<IUser>): Promise<any> {
-    console.log(this.refreshTokenExpirationTime);
-
     const payload = { sub: user._id };
     return {
       refreshToken: this.jwtService.sign(payload, {
