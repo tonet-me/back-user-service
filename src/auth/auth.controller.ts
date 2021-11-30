@@ -41,12 +41,14 @@ export class AuthController {
       body.phoneNumber,
     );
 
-    const sendNotify = await this.smsService.sendOneByPattern({
-      code: code.toString(),
-      phoneNumber: body.phoneNumber,
-    });
+    // const sendNotify = await this.smsService.sendOneByPattern({
+    //   code: code.toString(),
+    //   phoneNumber: body.phoneNumber,
+    // });
 
-    return new Responser(true, 'The code was sent:');
+    return new Responser(true, 'The code was sent:', {
+      code,
+    });
   }
 
   @GrpcMethod('AuthService', 'LoginOtp')
