@@ -20,6 +20,8 @@ import { UserModule } from './user/user.module';
         useNewUrlParser: true,
         replicaSet: false,
         useFindAndModify: true,
+        user: configService.get('dbUser'),
+        pass: configService.get('dbPass'),
       }),
       inject: [ConfigService],
     }),
