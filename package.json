@@ -37,13 +37,13 @@
     "cache-manager": "^3.4.4",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
-    "kavenegar": "^1.1.4",
     "mongoose": "^5.13.3",
     "mongoose-paginate-v2": "^1.4.1",
     "qrcode": "^1.4.4",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "ts-kavenegar": "0.0.8"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",

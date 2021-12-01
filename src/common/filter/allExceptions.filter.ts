@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { MongoError } from 'mongodb';
 import { of } from 'rxjs';
+import { KavenegarError } from 'ts-kavenegar';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -16,12 +17,15 @@ export class AllExceptionsFilter implements ExceptionFilter {
     let status: number;
     let errorName: string = '';
     let message: string = '';
+
     if (exception instanceof MongoError) {
       status = this.mongodbExceptions(exception);
     } else if (exception instanceof HttpException) {
       const error: any = exception.getResponse().valueOf();
       message = error?.message;
       status = exception.getStatus();
+    } else if (exception instanceof KavenegarError) {
+      status = +exception.name;
     } else status = HttpStatus.INTERNAL_SERVER_ERROR;
     if (exception?.message) {
       errorName = exception.message;
