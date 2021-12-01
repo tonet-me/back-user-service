@@ -5,6 +5,6 @@ export default () => ({
     dbName: process.env.MONGO_DB_NAME,
     dbUser: process.env.DB_USER,
     dbPass: process.env.DB_PASS,
-    uri: `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB_NAME}`,
+    uri: `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`,
   },
 });
