@@ -7,8 +7,6 @@ import {
   IsOptional,
   IsString,
   IsUrl,
-  Matches,
-  ValidateNested,
 } from 'class-validator';
 import { OmitType } from '@nestjs/mapped-types';
 
