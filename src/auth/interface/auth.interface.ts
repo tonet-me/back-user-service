@@ -3,7 +3,7 @@ export interface IMakeOtpRequest {
 }
 
 export interface IMakeOtpResult {
-  code: number;
+  code?: number;
 }
 
 /**
