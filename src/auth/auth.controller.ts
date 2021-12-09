@@ -6,16 +6,11 @@ import {
 import { GrpcMethod } from '@nestjs/microservices';
 import { IResponse } from 'src/common/utils/transform.response';
 import { AuthService } from './auth.service';
-import {
-  ILoginOtp,
-  ILoginOtpResult,
-  IMakeOtpResult,
-} from './interface/auth.interface';
+import { ILoginResult, IOauthGenerateToken } from './interface/auth.interface';
 import { Responser } from 'src/common/utils/responser';
 import { UserService } from 'src/user/user.service';
 import { IUser } from 'src/user/interface/user.interface';
-import { MakeOtpRequestDTO } from './dto/make.otp.request.dto';
-import { LoginOtpDTO } from './dto/login.otp.dto';
+
 import { SmsService } from 'src/notify/sms.service';
 
 @Controller('auth')
@@ -26,60 +21,54 @@ export class AuthController {
     private smsService: SmsService,
   ) {}
 
-  @GrpcMethod('AuthService', 'MakeOtp')
-  public async makeOtp(
-    body: MakeOtpRequestDTO,
-  ): Promise<IResponse<IMakeOtpResult>> {
-    const canRequestOtp = await this.authService.canRequestOtp(
-      body.phoneNumber,
-    );
+  // @GrpcMethod('AuthService', 'MakeOtp')
+  // public async makeOtp(
+  //   body: MakeOtpRequestDTO,
+  // ): Promise<IResponse<IMakeOtpResult>> {
+  //   const canRequestOtp = await this.authService.canRequestOtp(
+  //     body.phoneNumber,
+  //   );
 
-    if (!canRequestOtp)
-      throw new ForbiddenException('The code has already been sent');
+  //   if (!canRequestOtp)
+  //     throw new ForbiddenException('The code has already been sent');
 
-    const code: number = await this.authService.generateOrpCode(
-      body.phoneNumber,
-    );
+  //   const code: number = await this.authService.generateOrpCode(
+  //     body.phoneNumber,
+  //   );
 
-    await this.smsService.sendOneByPattern({
-      code: code.toString(),
-      phoneNumber: body.phoneNumber,
-    });
+  //   await this.smsService.sendOneByPattern({
+  //     code: code.toString(),
+  //     phoneNumber: body.phoneNumber,
+  //   });
 
-    return new Responser(true, 'The code was sent:', {});
-  }
+  //   return new Responser(true, 'The code was sent:', {});
+  // }
 
-  @GrpcMethod('AuthService', 'LoginOtp')
-  public async loginOtp(
-    body: LoginOtpDTO,
-  ): Promise<IResponse<ILoginOtpResult>> {
+  @GrpcMethod('AuthService', 'LoginWithOauth')
+  public async loginWithOauth(
+    body: IOauthGenerateToken,
+  ): Promise<IResponse<ILoginResult>> {
     let newUser: IUser;
-    const code = await this.authService.getOtp(body.phoneNumber);
-    if (code === body.code) {
-      this.authService.removeOtp(body.phoneNumber);
-      const userExist: IUser = await this.userService.findbymobile(
-        body.phoneNumber,
-      );
-      if (!userExist)
-        newUser = await this.userService.create({
-          mobile: body.phoneNumber,
-        });
-      const { accessToken } = await this.authService.generateJwt(
-        userExist || newUser,
-      );
-      const { refreshToken } = await this.authService.generateRefreshJwt(
-        userExist || newUser,
-      );
-      return new Responser<ILoginOtpResult>(true, 'Done', {
-        accessToken,
-        refreshToken,
+    const userExist: IUser = await this.userService.findbyEmail(body.email);
+    if (!userExist)
+      newUser = await this.userService.create({
+        email: body.email,
       });
-    } else throw new ForbiddenException('code is not valid');
+    const { accessToken } = await this.authService.generateJwt(
+      userExist || newUser,
+    );
+    const { refreshToken } = await this.authService.generateRefreshJwt(
+      userExist || newUser,
+    );
+    return new Responser<ILoginResult>(true, 'Done', {
+      accessToken,
+      refreshToken,
+    });
   }
 
   @GrpcMethod('AuthService', 'validateAccessToken')
   public async validateAccessToken(
-    body: ILoginOtpResult,
+    body: ILoginResult,
   ): Promise<IResponse<IUser>> {
     const user: IUser = await this.authService.validateJwt(body.accessToken);
     if (user) return new Responser<IUser>(true, '', user);
@@ -88,15 +77,15 @@ export class AuthController {
 
   @GrpcMethod('AuthService', 'getRefreshToken')
   public async getRefreshToken(
-    body: ILoginOtpResult,
-  ): Promise<IResponse<ILoginOtpResult>> {
+    body: ILoginResult,
+  ): Promise<IResponse<ILoginResult>> {
     const user: IUser = await this.authService.validateRefreshJwt(
       body.refreshToken,
     );
     if (user) {
       const { accessToken } = await this.authService.generateJwt(user);
       const { refreshToken } = await this.authService.generateRefreshJwt(user);
-      return new Responser<ILoginOtpResult>(true, 'Done', {
+      return new Responser<ILoginResult>(true, 'Done', {
         accessToken,
         refreshToken,
       });

@@ -9,7 +9,6 @@ import { UserService } from 'src/user/user.service';
 import { Cache } from 'cache-manager';
 import { JwtService } from '@nestjs/jwt';
 import { IUser } from 'src/user/interface/user.interface';
-import { OtpGenerate } from 'src/common/helper/otp.generate';
 
 @Injectable()
 export class AuthService {
@@ -25,19 +24,6 @@ export class AuthService {
     this.refreshTokenExpirationTime = configService.get(
       'refreshTokenExpireTime',
     );
-  }
-
-  public async saveOtp(phoneNumber: string, code: number) {
-    await this.cacheManager.set(phoneNumber + 'OTP', code, {
-      ttl: this.configService.get('OTP_TTL'),
-    });
-  }
-
-  public async getOtp(phoneNumber: string) {
-    return this.cacheManager.get(phoneNumber + 'OTP');
-  }
-  public async removeOtp(phoneNumber: string) {
-    return this.cacheManager.del(phoneNumber + 'OTP');
   }
 
   public async generateJwt(user: Partial<IUser>): Promise<any> {
@@ -77,18 +63,5 @@ export class AuthService {
     if (user) return user;
 
     throw new UnauthorizedException();
-  }
-
-  public async canRequestOtp(phoneNumber: string): Promise<boolean> {
-    const hasCode = await this.getOtp(phoneNumber);
-
-    if (hasCode) return false;
-    return true;
-  }
-
-  public async generateOrpCode(phoneNumber): Promise<number> {
-    const code: number = OtpGenerate.make();
-    await this.saveOtp(phoneNumber, code);
-    return code;
   }
 }

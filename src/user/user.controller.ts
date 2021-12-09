@@ -2,6 +2,7 @@ import { Controller, NotFoundException } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { Responser } from 'src/common/utils/responser';
 import { IResponse } from 'src/common/utils/transform.response';
+import { CheckProfileDTO } from './dto/check.profile.dto';
 import { UserIdDTO } from './dto/get.userId.dto';
 
 import { UserCompleteProfile, UserUpdateLimitDTO } from './dto/update.user.dto';
@@ -12,6 +13,23 @@ import { UserService } from './user.service';
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
+
+  @GrpcMethod('UserService', 'CheckProfile')
+  public async checkProfile(
+    body: CheckProfileDTO,
+  ): Promise<IResponse<Partial<IUser>>> {
+    const { email } = body;
+    const user: IUser = await this.userService.findbyEmail(email);
+
+    if (!user)
+      return new Responser(true, 'Done ', {
+        status: UserStatusEnum.REGISTERED,
+      });
+    return new Responser(true, 'Done ', {
+      _id: user._id,
+      status: user.status,
+    });
+  }
 
   @GrpcMethod('UserService', 'GetProfile')
   public async getProfile(body: UserIdDTO): Promise<IResponse<IUser>> {

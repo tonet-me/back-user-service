@@ -2,6 +2,10 @@ export interface IMakeOtpRequest {
   phoneNumber: string;
 }
 
+export interface IOauthGenerateToken {
+  email: string;
+}
+
 export interface IMakeOtpResult {
   code?: number;
 }
@@ -15,7 +19,7 @@ export interface ILoginOtp {
   code: number;
 }
 
-export interface ILoginOtpResult {
+export interface ILoginResult {
   accessToken: string;
   refreshToken: string;
 }

@@ -18,6 +18,10 @@ export class UserService {
     return this.userModel.findOne({ mobile });
   }
 
+  public async findbyEmail(email: string): Promise<IUser> {
+    return this.userModel.findOne({ email });
+  }
+
   // public async getPublic(userName: string): Promise<IUser[]> {
   //   const users = await this.userModel.aggregate([
   //     {
