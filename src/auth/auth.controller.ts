@@ -1,8 +1,4 @@
-import {
-  Controller,
-  ForbiddenException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Controller, UnauthorizedException } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { IResponse } from 'src/common/utils/transform.response';
 import { AuthService } from './auth.service';
@@ -11,14 +7,11 @@ import { Responser } from 'src/common/utils/responser';
 import { UserService } from 'src/user/user.service';
 import { IUser } from 'src/user/interface/user.interface';
 
-import { SmsService } from 'src/notify/sms.service';
-
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private smsService: SmsService,
   ) {}
 
   @GrpcMethod('AuthService', 'LoginWithOauth')
@@ -30,6 +23,7 @@ export class AuthController {
     if (!userExist)
       newUser = await this.userService.create({
         email: body.email,
+        emailVerify: true,
       });
     const { accessToken } = await this.authService.generateJwt(
       userExist || newUser,

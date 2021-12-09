@@ -24,10 +24,6 @@ export class UpdateUserDTO {
   @IsString()
   readonly fullName: string;
 
-  @IsString()
-  @IsOptional()
-  readonly mobile: string;
-
   @IsEmail()
   @IsOptional()
   readonly email: string;
@@ -55,32 +51,7 @@ export class UpdateUserDTO {
 export class UserUpdateLimitDTO extends OmitType(UpdateUserDTO, [
   'status',
   'emailVerify',
-  'mobile',
+  'email',
   'isActive',
   'verified',
 ] as const) {}
-
-export class UserCompleteProfile {
-  @IsDefined()
-  @IsMongoId()
-  readonly _id: string;
-
-  @IsDefined()
-  @IsString()
-  readonly fullName: string;
-
-  @IsOptional()
-  @IsUrl()
-  readonly photo: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @MinLength(8)
-  readonly password: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @Match('password')
-  @MinLength(8)
-  readonly rePassword: string;
-}

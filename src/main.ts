@@ -16,7 +16,7 @@ async function bootstrap() {
       transport: Transport.GRPC,
       options: {
         url: URL,
-        package: ['user.auth.otp', 'user.profile'],
+        package: ['user.auth', 'user.profile'],
         // protoLoader
         protoPath: [
           path.join(__dirname, '../proto/auth.proto'),

@@ -14,40 +14,10 @@ export class UserService {
     return this.userModel.findById(userId);
   }
 
-  public async findbymobile(mobile: string): Promise<IUser> {
-    return this.userModel.findOne({ mobile });
-  }
-
   public async findbyEmail(email: string): Promise<IUser> {
     return this.userModel.findOne({ email });
   }
 
-  // public async getPublic(userName: string): Promise<IUser[]> {
-  //   const users = await this.userModel.aggregate([
-  //     {
-  //       $match: {
-  //         userName,
-  //       },
-  //     },
-  //     {
-  //       $project: {
-  //         _id: 1,
-  //         fullName: 1,
-  //         title: 1,
-  //         profilePicture: 1,
-  //         userName: 1,
-  //         contact: 1,
-  //         mobile: {
-  //           $cond: [{ $eq: ['$mobileVisible', true] }, '$mobile', null],
-  //         },
-  //         email: {
-  //           $cond: [{ $eq: ['$emailVisible', true] }, '$email', null],
-  //         },
-  //       },
-  //     },
-  //   ]);
-  //   return users.length > 0 ? users[0] : null;
-  // }
   public async create(userData: Partial<IUser>): Promise<IUser> {
     const newUser = new this.userModel(userData);
     return newUser.save();

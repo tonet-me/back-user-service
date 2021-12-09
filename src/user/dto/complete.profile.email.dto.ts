@@ -1,24 +1,21 @@
 import {
   IsDefined,
-  IsEmail,
+  IsMongoId,
   IsOptional,
   IsString,
   IsUrl,
 } from 'class-validator';
-export class CreateUserDTO {
-  @IsString()
-  @IsDefined()
-  readonly mobile: string;
 
-  @IsOptional()
+export class UserCompleteProfileWithEmailDTO {
+  @IsDefined()
+  @IsMongoId()
+  readonly _id: string;
+
+  @IsDefined()
   @IsString()
   readonly fullName: string;
 
-  @IsEmail()
   @IsOptional()
-  readonly email: string;
-
   @IsUrl()
-  @IsOptional()
   readonly photo: string;
 }

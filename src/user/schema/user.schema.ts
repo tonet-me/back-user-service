@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { IUser } from '../interface/user.interface';
-import { Hash } from 'src/common/bcrypt/hash.bcrypt';
 
 export enum UserStatusEnum {
   REGISTERED = 'registered',
@@ -13,10 +12,6 @@ export const UserSchema = new mongoose.Schema<IUser>(
     fullName: {
       type: String,
     },
-    mobile: {
-      type: String,
-      unique: true,
-    },
     email: {
       type: String,
       required: true,
@@ -24,6 +19,7 @@ export const UserSchema = new mongoose.Schema<IUser>(
     },
     password: {
       type: String,
+      select: false,
     },
     emailVerify: {
       type: Boolean,
@@ -48,11 +44,3 @@ export const UserSchema = new mongoose.Schema<IUser>(
 );
 
 UserSchema.plugin(mongoosePaginate);
-
-UserSchema.pre('save', async function (next) {
-  var user = this;
-  if (!user.isModified('password')) return next();
-  user.password = await Hash.add(user.password);
-
-  next();
-});
