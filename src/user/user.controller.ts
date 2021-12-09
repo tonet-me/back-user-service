@@ -2,7 +2,6 @@ import { Controller, NotFoundException } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { Responser } from 'src/common/utils/responser';
 import { IResponse } from 'src/common/utils/transform.response';
-import { CheckProfileDTO } from './dto/check.profile.dto';
 import { UserIdDTO } from './dto/get.userId.dto';
 
 import { UserCompleteProfile, UserUpdateLimitDTO } from './dto/update.user.dto';
