@@ -40,6 +40,7 @@ export class AuthController {
     return new Responser<ILoginResult>(true, 'Done', {
       accessToken,
       refreshToken,
+      status: userExist?.status || newUser?.status,
     });
   }
 
