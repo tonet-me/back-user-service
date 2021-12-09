@@ -12,11 +12,12 @@ export const UserSchema = new mongoose.Schema<IUser>(
     },
     mobile: {
       type: String,
-      required: true,
       unique: true,
     },
     email: {
       type: String,
+      required: true,
+      unique: true,
     },
     emailVerify: {
       type: Boolean,
