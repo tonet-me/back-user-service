@@ -14,23 +14,6 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @GrpcMethod('UserService', 'CheckProfile')
-  public async checkProfile(
-    body: CheckProfileDTO,
-  ): Promise<IResponse<Partial<IUser>>> {
-    const { email } = body;
-    const user: IUser = await this.userService.findbyEmail(email);
-
-    if (!user)
-      return new Responser(true, 'Done ', {
-        status: UserStatusEnum.REGISTERED,
-      });
-    return new Responser(true, 'Done ', {
-      _id: user._id,
-      status: user.status,
-    });
-  }
-
   @GrpcMethod('UserService', 'GetProfile')
   public async getProfile(body: UserIdDTO): Promise<IResponse<IUser>> {
     const { _id } = body;

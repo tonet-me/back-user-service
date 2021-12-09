@@ -21,29 +21,6 @@ export class AuthController {
     private smsService: SmsService,
   ) {}
 
-  // @GrpcMethod('AuthService', 'MakeOtp')
-  // public async makeOtp(
-  //   body: MakeOtpRequestDTO,
-  // ): Promise<IResponse<IMakeOtpResult>> {
-  //   const canRequestOtp = await this.authService.canRequestOtp(
-  //     body.phoneNumber,
-  //   );
-
-  //   if (!canRequestOtp)
-  //     throw new ForbiddenException('The code has already been sent');
-
-  //   const code: number = await this.authService.generateOrpCode(
-  //     body.phoneNumber,
-  //   );
-
-  //   await this.smsService.sendOneByPattern({
-  //     code: code.toString(),
-  //     phoneNumber: body.phoneNumber,
-  //   });
-
-  //   return new Responser(true, 'The code was sent:', {});
-  // }
-
   @GrpcMethod('AuthService', 'LoginWithOauth')
   public async loginWithOauth(
     body: IOauthGenerateToken,
