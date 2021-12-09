@@ -10,4 +10,5 @@ export interface IUser extends Document {
   readonly photo: string;
   readonly isActive: boolean;
   readonly status: UserStatusEnum;
+  password: string;
 }

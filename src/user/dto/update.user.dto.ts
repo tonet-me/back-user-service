@@ -4,13 +4,16 @@ import {
   IsEmail,
   IsEnum,
   IsMongoId,
+  IsNotEmpty,
   IsOptional,
   IsString,
   IsUrl,
+  MinLength,
 } from 'class-validator';
 import { OmitType } from '@nestjs/mapped-types';
 
 import { UserStatusEnum } from '../schema/user.schema';
+import { Match } from 'src/common/decorator/match.decorator';
 
 export class UpdateUserDTO {
   @IsOptional()
@@ -70,7 +73,14 @@ export class UserCompleteProfile {
   @IsUrl()
   readonly photo: string;
 
-  @IsEmail()
-  @IsOptional()
-  readonly email: string;
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(8)
+  readonly password: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Match('password')
+  @MinLength(8)
+  readonly rePassword: string;
 }
