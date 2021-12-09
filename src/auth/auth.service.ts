@@ -27,7 +27,7 @@ export class AuthService {
   }
 
   public async generateJwt(user: Partial<IUser>): Promise<any> {
-    const payload = { mobile: user.mobile, sub: user._id, status: user.status };
+    const payload = { email: user.email, sub: user._id, status: user.status };
     return {
       accessToken: this.jwtService.sign(payload),
     };
