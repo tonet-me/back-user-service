@@ -2,7 +2,11 @@ import { Controller, UnauthorizedException } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { IResponse } from 'src/common/utils/transform.response';
 import { AuthService } from './auth.service';
-import { ILoginResult, IOauthGenerateToken } from './interface/auth.interface';
+import {
+  IGetRefreshToken,
+  ILoginResult,
+  IOauthGenerateToken,
+} from './interface/auth.interface';
 import { Responser } from 'src/common/utils/responser';
 import { UserService } from 'src/user/user.service';
 import { IUser } from 'src/user/interface/user.interface';
@@ -24,6 +28,8 @@ export class AuthController {
       newUser = await this.userService.create({
         email: body.email,
         emailVerify: true,
+        oauthRegistered: true,
+        oauthProvider: body.oauthProvider,
       });
     const { accessToken } = await this.authService.generateJwt(
       userExist || newUser,
@@ -49,7 +55,7 @@ export class AuthController {
 
   @GrpcMethod('AuthService', 'getRefreshToken')
   public async getRefreshToken(
-    body: ILoginResult,
+    body: IGetRefreshToken,
   ): Promise<IResponse<ILoginResult>> {
     const user: IUser = await this.authService.validateRefreshJwt(
       body.refreshToken,

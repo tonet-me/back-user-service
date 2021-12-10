@@ -39,6 +39,11 @@ export const UserSchema = new mongoose.Schema<IUser>(
       enum: UserStatusEnum,
       default: UserStatusEnum.REGISTERED,
     },
+    oauthRegistered: {
+      type: Boolean,
+      default: false,
+    },
+    oauthProvider: String,
   },
   { timestamps: true },
 );

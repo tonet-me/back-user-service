@@ -9,5 +9,7 @@ export interface IUser extends Document {
   readonly photo: string;
   readonly isActive: boolean;
   readonly status: UserStatusEnum;
+  readonly oauthRegistered: boolean;
+  readonly oauthProvider: string;
   password: string;
 }

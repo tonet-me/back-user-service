@@ -20,14 +20,20 @@ export class AuthService {
     private configService: ConfigService,
     private jwtService: JwtService,
   ) {
-    this.refreshTokenSecret = configService.get('refreshTokenSecret');
-    this.refreshTokenExpirationTime = configService.get(
+    this.refreshTokenSecret = this.configService.get('refreshTokenSecret');
+    this.refreshTokenExpirationTime = this.configService.get(
       'refreshTokenExpireTime',
     );
   }
 
   public async generateJwt(user: Partial<IUser>): Promise<any> {
-    const payload = { email: user.email, sub: user._id, status: user.status };
+    const payload = {
+      email: user.email,
+      sub: user._id,
+      status: user.status,
+      oauthRegistered: user.oauthRegistered,
+      oauthProvider: user.oauthProvider,
+    };
     return {
       accessToken: this.jwtService.sign(payload),
     };

@@ -5,4 +5,5 @@ export default () => ({
   accessTokenExpireTime: process.env.ACCESS_TOKEN_EXPIRE_TIME || '72h',
   refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET || 'setSecret',
   refreshTokenExpireTime: process.env.REFRESH_TOKEN_EXPIRATION_TIME || '120h',
+  env: process.env.ENV || 'development',
 });
