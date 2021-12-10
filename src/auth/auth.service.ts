@@ -24,6 +24,21 @@ export class AuthService {
     this.refreshTokenExpirationTime = this.configService.get(
       'refreshTokenExpireTime',
     );
+
+    let authMechanism = configService.get<string>('database.authMechanism');
+    let authSource = configService.get<string>('database.authSource');
+
+    let auth =
+      configService.get<string>('env') != 'production'
+        ? undefined
+        : {
+            user: configService.get<string>('database.dbUser'),
+            password: configService.get<string>('database.dbPass'),
+          };
+    console.log(auth);
+    console.log(authMechanism);
+
+    console.log(authSource);
   }
 
   public async generateJwt(user: Partial<IUser>): Promise<any> {
