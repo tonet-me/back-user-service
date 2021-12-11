@@ -1,3 +1,5 @@
+import { IUser } from 'src/user/interface/user.interface';
+
 export interface IOauthGenerateToken {
   email: string;
   oauthProvider: string;
@@ -12,4 +14,28 @@ export interface ILoginResult {
 
 export interface IGetRefreshToken {
   refreshToken: string;
+}
+
+export interface ICheckEmailBeforRegisterResponse {
+  email: string;
+  registered: boolean;
+}
+
+export interface IRegisterWithEmailRequest {
+  email: string;
+  password: string;
+  code: number;
+}
+
+export interface ICheckEmailBeforRegisterRequest {
+  email: string;
+}
+export interface ILoginWithEmailRequest {
+  email: string;
+  password: string;
+}
+
+export interface ICheckEmailAndPassword {
+  user: IUser;
+  success: boolean;
 }

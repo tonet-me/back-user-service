@@ -1,14 +1,10 @@
-import {
-  CACHE_MANAGER,
-  Inject,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/user/user.service';
-import { Cache } from 'cache-manager';
 import { JwtService } from '@nestjs/jwt';
 import { IUser } from 'src/user/interface/user.interface';
+import { Hash } from 'src/common/bcrypt/hash.bcrypt';
+import { ICheckEmailAndPassword } from './interface/auth.interface';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +12,6 @@ export class AuthService {
   readonly refreshTokenExpirationTime;
   constructor(
     private readonly userService: UserService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private configService: ConfigService,
     private jwtService: JwtService,
   ) {
@@ -69,5 +64,24 @@ export class AuthService {
     if (user) return user;
 
     throw new UnauthorizedException();
+  }
+
+  public async checkEmailAndPassword(
+    email: string,
+    password: string,
+  ): Promise<ICheckEmailAndPassword> {
+    const user: IUser = await this.userService.findbyEmail(email);
+    if (user) {
+      const compare = await Hash.compare(password, user.password);
+      if (!compare) throw new UnauthorizedException();
+      return {
+        success: true,
+        user,
+      };
+    }
+    return {
+      success: false,
+      user: undefined,
+    };
   }
 }
