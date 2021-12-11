@@ -1,51 +1,45 @@
-import * as mongoose from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
-import { IUser } from '../interface/user.interface';
+
+export type UserDocument = User & mongoosePaginate<Document>;
 
 export enum UserStatusEnum {
   REGISTERED = 'registered',
   COMPLETED = 'completed',
 }
 
-export const UserSchema = new mongoose.Schema<IUser>(
-  {
-    fullName: {
-      type: String,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      select: false,
-    },
-    emailVerify: {
-      type: Boolean,
-      default: false,
-    },
-    verified: {
-      type: Boolean,
-      default: false,
-    },
-    photo: String,
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-    status: {
-      type: String,
-      enum: UserStatusEnum,
-      default: UserStatusEnum.REGISTERED,
-    },
-    oauthRegistered: {
-      type: Boolean,
-      default: false,
-    },
-    oauthProvider: String,
-  },
-  { timestamps: true },
-);
+@Schema({ timestamps: true })
+export class User {
+  @Prop()
+  fullName: string;
 
+  @Prop({ unique: true, required: true })
+  email: string;
+
+  @Prop({ select: false })
+  password: string;
+
+  @Prop({ default: false })
+  emailVerify: boolean;
+
+  @Prop({ default: true })
+  isActive: boolean;
+
+  @Prop({ default: false })
+  verified: string;
+
+  @Prop()
+  photo: string;
+
+  @Prop({ enum: UserStatusEnum, default: UserStatusEnum.REGISTERED })
+  status: string;
+
+  @Prop({ default: false })
+  oauthRegistered: boolean;
+
+  @Prop()
+  oauthProvider: string;
+}
+
+export const UserSchema = SchemaFactory.createForClass(User);
 UserSchema.plugin(mongoosePaginate);

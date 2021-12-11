@@ -17,11 +17,11 @@ import {
 } from './interface/auth.interface';
 import { Responser } from 'src/common/utils/responser';
 import { UserService } from 'src/user/user.service';
-import { IUser } from 'src/user/interface/user.interface';
 import { emailCodeGenerator } from 'src/common/utils/code-generator';
 import { NodeCache } from 'src/common/node-cache/node-cache';
 import { Hash } from 'src/common/bcrypt/hash.bcrypt';
 import { MailService } from 'src/mail/mail.service';
+import { User } from 'src/user/schema/user.schema';
 
 @Controller('auth')
 export class AuthController {
@@ -35,8 +35,8 @@ export class AuthController {
   public async loginWithOauth(
     body: IOauthGenerateToken,
   ): Promise<IResponse<ILoginResult>> {
-    let newUser: IUser;
-    const userExist: IUser = await this.userService.findbyEmail(body.email);
+    let newUser: User;
+    const userExist: User = await this.userService.findbyEmail(body.email);
     if (!userExist)
       newUser = await this.userService.create({
         email: body.email,
@@ -85,7 +85,7 @@ export class AuthController {
     const getCodeFromCache = await NodeCache.getValueRegisterWithEmail(email);
     if (code == getCodeFromCache) {
       NodeCache.deleteRegisterWithEmail(email);
-      const newUser: IUser = await this.userService.create({
+      const newUser: User = await this.userService.create({
         email: email,
         emailVerify: true,
         password: await Hash.add(password),
@@ -110,7 +110,8 @@ export class AuthController {
       body.email,
       body.password,
     );
-    if (!validEmailAndPass.success) throw new ForbiddenException();
+    if (!validEmailAndPass.success)
+      throw new ForbiddenException('email or password is incorrect');
     const { accessToken } = await this.authService.generateJwt(
       validEmailAndPass.user,
     );
@@ -127,9 +128,9 @@ export class AuthController {
   @GrpcMethod('AuthService', 'validateAccessToken')
   public async validateAccessToken(
     body: ILoginResult,
-  ): Promise<IResponse<IUser>> {
-    const user: IUser = await this.authService.validateJwt(body.accessToken);
-    if (user) return new Responser<IUser>(true, '', user);
+  ): Promise<IResponse<User>> {
+    const user: User = await this.authService.validateJwt(body.accessToken);
+    if (user) return new Responser<User>(true, '', user);
     throw new UnauthorizedException();
   }
 
@@ -137,7 +138,7 @@ export class AuthController {
   public async getRefreshToken(
     body: IGetRefreshToken,
   ): Promise<IResponse<ILoginResult>> {
-    const user: IUser = await this.authService.validateRefreshJwt(
+    const user: User = await this.authService.validateRefreshJwt(
       body.refreshToken,
     );
     if (user) {

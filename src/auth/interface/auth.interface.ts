@@ -1,4 +1,4 @@
-import { IUser } from 'src/user/interface/user.interface';
+import { User } from 'src/user/schema/user.schema';
 
 export interface IOauthGenerateToken {
   email: string;
@@ -36,6 +36,6 @@ export interface ILoginWithEmailRequest {
 }
 
 export interface ICheckEmailAndPassword {
-  user: IUser;
+  user: User;
   success: boolean;
 }

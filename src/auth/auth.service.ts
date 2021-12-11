@@ -2,9 +2,9 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { IUser } from 'src/user/interface/user.interface';
 import { Hash } from 'src/common/bcrypt/hash.bcrypt';
 import { ICheckEmailAndPassword } from './interface/auth.interface';
+import { User, UserDocument } from 'src/user/schema/user.schema';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +21,7 @@ export class AuthService {
     );
   }
 
-  public async generateJwt(user: Partial<IUser>): Promise<any> {
+  public async generateJwt(user: Partial<UserDocument>): Promise<any> {
     const payload = {
       email: user.email,
       sub: user._id,
@@ -34,7 +34,7 @@ export class AuthService {
     };
   }
 
-  public async generateRefreshJwt(user: Partial<IUser>): Promise<any> {
+  public async generateRefreshJwt(user: Partial<UserDocument>): Promise<any> {
     const payload = { sub: user._id };
     return {
       refreshToken: this.jwtService.sign(payload, {
@@ -44,22 +44,22 @@ export class AuthService {
     };
   }
 
-  public async validateJwt(token: any): Promise<IUser> {
+  public async validateJwt(token: any): Promise<User> {
     const { sub } = this.jwtService.verify(token);
 
-    const user: IUser = await this.userService.findbyId(sub);
+    const user: User = await this.userService.findbyId(sub);
 
     if (user) return user;
 
     throw new UnauthorizedException();
   }
 
-  public async validateRefreshJwt(token: any): Promise<IUser> {
+  public async validateRefreshJwt(token: any): Promise<User> {
     const { sub } = this.jwtService.verify(token, {
       secret: this.refreshTokenSecret,
     });
 
-    const user: IUser = await this.userService.findbyId(sub);
+    const user: User = await this.userService.findbyId(sub);
 
     if (user) return user;
 
@@ -70,10 +70,12 @@ export class AuthService {
     email: string,
     password: string,
   ): Promise<ICheckEmailAndPassword> {
-    const user: IUser = await this.userService.findbyEmail(email);
+    const user: UserDocument =
+      await this.userService.findByEmailWithSelectPassword(email);
     if (user) {
       const compare = await Hash.compare(password, user.password);
-      if (!compare) throw new UnauthorizedException();
+      if (!compare)
+        throw new UnauthorizedException('email or password is incorrect');
       return {
         success: true,
         user,
