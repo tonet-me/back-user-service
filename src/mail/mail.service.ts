@@ -24,26 +24,23 @@ export class MailService {
     this.options = {
       viewEngine: {
         partialsDir: './src/mail/views/partials',
-        layoutsDir: './src//mail/views/',
+        layoutsDir: './src//mail/views/welcome',
         extname: '.hbs',
       },
       extName: '.hbs',
-      viewPath: './src/mail/views',
+      viewPath: './src/mail/views/welcome',
     };
 
     this.transporter.use('compile', hbs(this.options));
   }
 
-  private async sendRegisterEmail(
-    to: string,
-    data: IRegisterCode,
-  ): Promise<boolean> {
+  private async sendRegisterEmail(to: string, code: number): Promise<boolean> {
     const mailInfo = {
       from: '"Tonet" <info@tonet.me>',
       to,
       subject: 'Register email',
       template: 'main',
-      context: data,
+      context: { code },
     };
     const info = await this.transporter.sendMail(mailInfo);
     if (!info) return false;
@@ -52,9 +49,6 @@ export class MailService {
 
   public async sendRegisterCode(data: IRegisterCode): Promise<boolean> {
     const { code, email } = data;
-    return this.sendRegisterEmail(email, {
-      email,
-      code,
-    });
+    return this.sendRegisterEmail(email, code);
   }
 }
