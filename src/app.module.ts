@@ -22,19 +22,19 @@ import { UserModule } from './user/user.module';
         useFindAndModify: false,
         useUnifiedTopology: true,
         dbName: configService.get<string>('database.dbName'),
-        // authMechanism: configService.get<string>('database.authMechanism'),
-        // authSource: configService.get<string>('database.authSource'),
-        // auth: {
-        //   user: configService.get<string>('database.dbUser'),
-        //   password: configService.get<string>('database.dbPass'),
-        // },
-        auth:
-          configService.get<string>('env') != 'production'
-            ? undefined
-            : {
-                user: configService.get<string>('database.dbUser'),
-                password: configService.get<string>('database.dbPass'),
-              },
+        authMechanism: configService.get<string>('database.authMechanism'),
+        authSource: configService.get<string>('database.authSource'),
+        auth: {
+          user: configService.get<string>('database.dbUser'),
+          password: configService.get<string>('database.dbPass'),
+        },
+        // auth:
+        //   configService.get<string>('env') != 'production'
+        //     ? undefined
+        //     : {
+        //         user: configService.get<string>('database.dbUser'),
+        //         password: configService.get<string>('database.dbPass'),
+        //       },
       }),
       inject: [ConfigService],
     }),
