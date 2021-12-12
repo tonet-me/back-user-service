@@ -12,6 +12,7 @@ import { IResponse } from 'src/common/utils/transform.response';
 import { ChangePasswordDTO } from './dto/change.password.dto';
 import { UserCompleteProfileWithEmailDTO } from './dto/complete.profile.email.dto';
 import { UserCompleteProfileWithOauthDTO } from './dto/complete.profile.oauth.dto';
+import { ForgetPasswordConformDTO } from './dto/forget.password.dto';
 import { ForgetPasswordRequestCodeDTO } from './dto/forget.password.request.code.sto';
 import { UserIdDTO } from './dto/get.userId.dto';
 import { UserUpdateLimitDTO } from './dto/update.user.dto';
@@ -100,6 +101,26 @@ export class UserController {
       email,
       canUse: true,
     });
+  }
+
+  @GrpcMethod('UserService', 'ForgetPasswordConform')
+  public async forgetPasswordConform(
+    body: ForgetPasswordConformDTO,
+  ): Promise<IResponse<Pick<User, 'email'>>> {
+    const { email, code, password } = body;
+    const getCodeFromCache = await NodeCache.getValueForgetPasswordCode(email);
+    if (getCodeFromCache == code) {
+      NodeCache.deleteForgetPasswordCode(email);
+      const hashedPassword = await Hash.add(password);
+      const userExist = await this.userService.findbyEmail(email);
+      if (!userExist) throw new NotFoundException('user not found');
+      await this.userService.update(userExist._id, {
+        password: hashedPassword,
+      });
+      return new Responser(true, 'password is changed, login again please', {
+        email,
+      });
+    } else throw new ForbiddenException('the code is incorrect');
   }
 
   @GrpcMethod('UserService', 'DeleteProfilePhoto')
