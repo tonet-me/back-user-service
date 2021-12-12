@@ -14,4 +14,16 @@ export class NodeCache {
   static getValueRegisterWithEmail(email: string) {
     return this.nodeCache.get(`emailRegister-${email}`);
   }
+
+  static async addForgetPasswordCode(email: string, code: number) {
+    return this.nodeCache.set(`forgetPassword-${email}`, code, 480);
+  }
+
+  static deleteForgetPasswordCode(email: string) {
+    return this.nodeCache.del(`forgetPassword-${email}`);
+  }
+
+  static getValueForgetPasswordCode(email: string) {
+    return this.nodeCache.get(`forgetPassword-${email}`);
+  }
 }
