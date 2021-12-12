@@ -3,6 +3,7 @@ import { GrpcMethod } from '@nestjs/microservices';
 import { Hash } from 'src/common/bcrypt/hash.bcrypt';
 import { Responser } from 'src/common/utils/responser';
 import { IResponse } from 'src/common/utils/transform.response';
+import { UserCompleteProfileWithEmailDTO } from './dto/complete.profile.email.dto';
 import { UserCompleteProfileWithOauthDTO } from './dto/complete.profile.oauth.dto';
 import { UserIdDTO } from './dto/get.userId.dto';
 
@@ -38,6 +39,18 @@ export class UserController {
   ): Promise<IResponse<User>> {
     const { _id, ...CompleteData } = body;
     CompleteData.password = await Hash.add(CompleteData.password);
+    const user: User = await this.userService.update(_id, {
+      status: UserStatusEnum.COMPLETED,
+      ...CompleteData,
+    });
+    return new Responser(true, 'Done ', user);
+  }
+
+  @GrpcMethod('UserService', 'CompleteProfileWithEmail')
+  public async completeProfileWithEmail(
+    body: UserCompleteProfileWithEmailDTO,
+  ): Promise<IResponse<User>> {
+    const { _id, ...CompleteData } = body;
     const user: User = await this.userService.update(_id, {
       status: UserStatusEnum.COMPLETED,
       ...CompleteData,
