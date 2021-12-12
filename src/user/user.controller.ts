@@ -1,8 +1,13 @@
-import { Controller, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { Hash } from 'src/common/bcrypt/hash.bcrypt';
 import { Responser } from 'src/common/utils/responser';
 import { IResponse } from 'src/common/utils/transform.response';
+import { ChangePasswordDTO } from './dto/change.password.dto';
 import { UserCompleteProfileWithEmailDTO } from './dto/complete.profile.email.dto';
 import { UserCompleteProfileWithOauthDTO } from './dto/complete.profile.oauth.dto';
 import { UserIdDTO } from './dto/get.userId.dto';
@@ -54,6 +59,26 @@ export class UserController {
     const user: User = await this.userService.update(_id, {
       status: UserStatusEnum.COMPLETED,
       ...CompleteData,
+    });
+    return new Responser(true, 'Done ', user);
+  }
+
+  @GrpcMethod('UserService', 'ChangePassword')
+  public async changePassword(
+    body: ChangePasswordDTO,
+  ): Promise<IResponse<User>> {
+    const { _id, ...passwordsData } = body;
+    const userExist = await this.userService.findByIdWithSelectPassword(_id);
+    if (!userExist) throw new NotFoundException('user not found');
+    const validOldPassword = await Hash.compare(
+      passwordsData.oldPassword,
+      userExist.password,
+    );
+    if (!validOldPassword)
+      throw new ForbiddenException('old password is wrong');
+
+    const user: User = await this.userService.update(_id, {
+      password: await Hash.add(passwordsData.newPassword),
     });
     return new Responser(true, 'Done ', user);
   }
