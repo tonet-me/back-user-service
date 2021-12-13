@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
@@ -73,6 +77,8 @@ export class AuthService {
     const user: UserDocument =
       await this.userService.findByEmailWithSelectPassword(email);
     if (user) {
+      if (!user.password)
+        throw new ForbiddenException('email or password is incorrect');
       const compare = await Hash.compare(password, user.password);
       if (!compare)
         throw new UnauthorizedException('email or password is incorrect');
