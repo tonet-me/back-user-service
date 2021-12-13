@@ -9,6 +9,7 @@ import { NodeCache } from 'src/common/node-cache/node-cache';
 import { emailForgetCodeGenerator } from 'src/common/utils/code-generator';
 import { Responser } from 'src/common/utils/responser';
 import { IResponse } from 'src/common/utils/transform.response';
+import { MailService } from 'src/mail/mail.service';
 import { ChangePasswordDTO } from './dto/change.password.dto';
 import { UserCompleteProfileWithEmailDTO } from './dto/complete.profile.email.dto';
 import { UserCompleteProfileWithOauthDTO } from './dto/complete.profile.oauth.dto';
@@ -22,7 +23,10 @@ import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private mailService: MailService,
+  ) {}
 
   @GrpcMethod('UserService', 'GetProfile')
   public async getProfile(body: UserIdDTO): Promise<IResponse<User>> {
@@ -96,7 +100,7 @@ export class UserController {
     if (!userExist) throw new NotFoundException('user not found');
     const forgetCode: number = emailForgetCodeGenerator();
     await NodeCache.addForgetPasswordCode(email, forgetCode);
-    //TODO: send email
+    await this.mailService.sendForgetCode({ email: body.email, forgetCode });
     return new Responser(true, 'Done ', {
       email,
       canUse: true,
