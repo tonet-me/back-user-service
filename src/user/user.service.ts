@@ -15,11 +15,13 @@ export class UserService {
   }
 
   public async findbyEmail(email: string): Promise<UserDocument> {
-    return this.userModel.findOne({ email: email.toLowerCase() });
+    return this.userModel.findOne({
+      email: { $regex: new RegExp(email, 'i') },
+    });
   }
   public async findByEmailWithSelectPassword(email: string): Promise<User> {
     return this.userModel
-      .findOne({ email: email.toLowerCase() })
+      .findOne({ email: { $regex: new RegExp(email, 'i') } })
       .select('+password')
       .exec();
   }
@@ -29,13 +31,11 @@ export class UserService {
   }
 
   public async create(userData: Partial<User>): Promise<User> {
-    if (userData.email) userData.email = userData.email.toLowerCase();
     const newUser = new this.userModel(userData);
     return newUser.save();
   }
 
   public async update(userId: string, userData: Partial<User>): Promise<User> {
-    if (userData.email) userData.email = userData.email.toLowerCase();
     return this.userModel.findByIdAndUpdate(
       userId,
       {
