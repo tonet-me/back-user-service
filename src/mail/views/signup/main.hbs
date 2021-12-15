@@ -33,7 +33,7 @@
   left: 50%;
   width: 60%;
   height: auto;
-  padding-bottom: 3rem;
+  padding-bottom: 2rem;
   background-color: #fff;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
@@ -44,7 +44,7 @@
 
 .img-container {
   position: relative;
-  padding: 2rem 2rem 1rem;
+  padding: 2rem;
 }
 
 .img-container .logo {
@@ -112,19 +112,14 @@
 }
 
 .verity-code div span {
+  cursor: pointer;
   margin-right: 10px;
   color: #428DFF;
   font-size: 1rem;
 }
 
-.bottom-forget{
-  display: block !important;
-  width: 100%;
- 
-}
-
 .button-container {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
 .button-container button {
@@ -136,8 +131,7 @@
   font-size: 1.5rem;
   color: #fff;
   border: 0;
-  width: 80%;
-  min-width: 250px;
+  width: 50%;
   cursor: pointer;
 }
 
@@ -232,61 +226,54 @@
         <div class="box-container">
             <div class="img-container">
                 <!--  tonet logo -->
-                <img class='logo' src="https://cdn.tonet.me/static/tonet-logo.svg" alt="">
+                <img class="logo" src="https://cdn.tonet.me/static/tonet-logo.svg" alt="">
                   
                 <div class="img-box">
                     <!-- icon page -->
                     
+                    <!-- verify code -->
                     
-                      
-                    <!-- forget password -->
-                   <img class="img" src="https://cdn.tonet.me/static/forget-pass.svg" alt="">
+                    <img class="img" src="https://cdn.tonet.me/static/verify-code.svg" alt="">
+                   
                       
 
                 </div>
                 <!-- page header -->
-                <h2> Forget Password </h2>
+                <h2> Tonet verification code  </h2>
                 <!-- desciotion of message  -->
                 <p>
-                  for reset your password
-                  please use bellow verification code :
+                    to continue with ypur email verification, plaese use the following code :
                 </p>
 
             </div>
 
+            <!-- verification container -->
             <div class="verity-code">
-              <span class="Mycode" id="verifyCode">{{forgetCode}}</span>
+                <span class="Mycode" id="verifyCode">{{code}}</span>
 
-              <div class="bottom-forget">
-                <div class="button-container">
-                  <!-- luch link massoud -->
-                  <a href="#">
-                      <button> lunch application  </button>
-                  </a>
-                </div>
                 <div>
                     <span> 
                         <img src="https://cdn.tonet.me/static/icon-feather.svg" alt="">
                     </span>
                     <span onclick="CopyToClipboard()"> Copy The Code </span>
                 </div>
-              </div>
-          </div>
+            </div>
+
         </div>
     </div>
 
     <script>
 
-      function CopyToClipboard() {
-        /* Get the text field */
-        var copyText = document.getElementById("verifyCode").innerHTML;
-        if(copyText.length < 6 && copyText.length > 4){
-          navigator.clipboard.writeText(copyText);
-          alert("Copied the text: " + copyText);
-        }
+    function CopyToClipboard() {
+      /* Get the text field */
+      var copyText = document.getElementById("verifyCode").innerHTML;
+      if(copyText.length < 6 && copyText.length > 4){
+        navigator.clipboard.writeText(copyText);
+        alert("Copied the text: " + copyText);
       }
-  
-      </script>
+    }
+
+    </script>
     
 </body>
 </html>

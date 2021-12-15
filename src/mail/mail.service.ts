@@ -36,11 +36,11 @@ export class MailService {
     this.options = {
       viewEngine: {
         partialsDir: './src/mail/views/partials',
-        layoutsDir: './src//mail/views/welcome',
+        layoutsDir: './src//mail/views/signup',
         extname: '.hbs',
       },
       extName: '.hbs',
-      viewPath: './src/mail/views/welcome',
+      viewPath: './src/mail/views/signup',
     };
     this.transporter.use('compile', hbs(this.options));
 
