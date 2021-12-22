@@ -118,9 +118,15 @@ export class UserController {
       const hashedPassword = await Hash.add(password);
       const userExist = await this.userService.findbyEmail(email);
       if (!userExist) throw new NotFoundException('user not found');
-      await this.userService.update(userExist._id, {
-        password: hashedPassword,
-      });
+      if (userExist.oauthRegistered && !userExist.password)
+        await this.userService.update(userExist._id, {
+          password: hashedPassword,
+          oauthRegistered: false,
+        });
+      else
+        await this.userService.update(userExist._id, {
+          password: hashedPassword,
+        });
       return new Responser(true, 'password is changed, login again please', {
         email,
       });
